@@ -1,0 +1,36 @@
+trigger:
+  batch: 'true'
+  branches:
+    include:
+    - main
+
+resources:
+- repo: self
+
+stages:
+- stage: Build_Lyrist_Image
+  displayName: Build Lyrist image
+  jobs:
+  - job: Build_Lyrist_Image
+    displayName: Build Lyrist image
+    pool:
+      name: Redshift-OnPrem-Linux
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Building Lyrist Image
+      inputs:
+        command: buildAndPush
+        containerRegistry: 'Internal RS-DockerRegistry'
+        repository: 'lyrist'
+        dockerfile: './Dockerfile'
+        tags: latest
+    - task: CmdLine@2
+      displayName: Cleaning up images older than 24H
+      inputs:
+       script: 'docker system prune -a --force --filter "until=24h"' 
+
+    - task: CmdLine@2
+      displayName: Cleaning up unneeded images
+      inputs:
+       script: 'docker system prune -f'
