@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lyrist
+  namespace: lyrist
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lyrist
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: lyrist
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - image: registry.redshiftent.com/lyrist
+        name: lyrist
+        imagePullPolicy: Always
+        ports:
+         - containerPort: 3000
+           name: tcp3000
+           protocol: TCP
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: {}
+          privileged: false
+          readOnlyRootFilesystem: false
+      imagePullSecrets:
+       - name: dockersecret
+      restartPolicy: Always
