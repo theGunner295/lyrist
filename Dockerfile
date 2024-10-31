@@ -5,16 +5,12 @@ LABEL description="Lyrics Fetching API"
 
 WORKDIR /app
 
-RUN npm install next@latest react@latest react-dom@latest
-
-
-
 COPY package*.json ./
 
-RUN next build
+RUN npm install
 
 COPY . .
 
 EXPOSE 3000
 
-CMD next start
+CMD npm run dev
