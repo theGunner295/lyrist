@@ -21,8 +21,8 @@ stages:
       displayName: Building Lyrist Image
       inputs:
         command: buildAndPush
-        containerRegistry: 'Internal RS-DockerRegistry'
-        repository: 'lyrist'
+        containerRegistry: 'Internal RS-DockerRegistry Personal'
+        repository: 'personal/lyrist'
         dockerfile: './Dockerfile'
         tags: latest
     - task: CmdLine@2
